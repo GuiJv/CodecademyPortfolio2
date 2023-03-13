@@ -6,7 +6,7 @@ const envelopes = require('./envelopes')
 
 envelopeRouter.param('envelope', (req,res,next, envelope) =>{
     if(envelopes.hasOwnProperty(envelope)){
-        console.log(envelopes[envelope])
+
         req.envelope = envelopes[envelope]
         next()
     }else{
@@ -29,7 +29,16 @@ envelopeRouter.get('/:envelope/', (req,res,next) => {
     res.status(200).send(`${envelope}`)
 })
 
+envelopeRouter.put('/:envelope/', (req,res,next) =>{
+    const envelope = req.params.envelope
+    envelopes[envelope] += req.body.value
+    res.status(200).send(`${envelopes[envelope]}`)
+})
 
+envelopeRouter.delete('/:envelope/', (req,res,next) =>{
+    delete envelopes[req.envelope]
+    res.status(204).send('Deleted')
+})
 
 
 module.exports = envelopeRouter
